@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Respond' %}
+
+    {% include 'google_icons/icons.html' with opsz=48 weight=700 fill=1 grad=200 %}
+</head>
+
+<body class="bg-light text-center text-{{alert}}">
+
+    <div class="container" style="max-width:100vh;">
+        <div class="row align-items-center" style="min-height:90vh;">
+            <div class="col-12">
+                <span class="material-symbols-outlined" style="font-size:8em;">
+                    {{icon}}
+                </span>
+                <p class="display-3">{{ title }}</p>
+                {% if body_type == 0 %}
+                <p class="mb-0"><a class="link-{{alert}} fw-bold" href="{% url href %}">Click here</a> to try again...
+                </p>
+                {% endif %}
+                {% if body_type == 1 %}
+                <p class="mb-0"><a class="link-{{alert}} fw-bold" href="{% url href %}">Click here</a> to login.
+                </p>
+                {% endif %}
+                {% if body_type == 2 %}
+                <p class="mb-0"><a class="link-{{alert}} fw-bold" href="{% url href %}">Click here</a> to continue.
+                </p>
+                {% endif %}
+                {% if body_type == 3 %}
+                <p class="mb-0">You do not have permission to access this page. You first need to login to continue.</p>
+                <hr />
+                <p class="mb-0"><a class="link-{{alert}} fw-bold" href="{% url href %}">Click here</a> to login.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        {% if alert != 'primary' %}
+        <div class="accordion mb-5 text-start" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Why am I seeing this?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p>You are redirected to this page because the password you've entered is incorrect.</p>
+                        <p>You are redirected to this page because the password and reenter password fields does not
+                            match with eachother.</p>
+                        <p>You are redirected to this page because the user with same username already exists in our
+                            database.</p>
+                        <p>You are redirected to this page because you are trying to access the page that you do not
+                            have access to visit.</p>
+                        <p>You are redirected to this page because you are trying to access the page that without loging
+                            in to the system.</p>
+                        <p>If you think there is glitch or if you are redirected to this page multiple times
+                            regardless your authentication then please refer to these <a type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
+                                aria-controls="collapseTwo">troubleshoting methods</a>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Common ways to troubleshoot.
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p class="fw-bold mb-1">Check your Internet connection</p>
+                        <p class="mb-4">Check any cables and reboot any routers, modems, or other network devices you may be using.
+                        </p>
+                        <p class="fw-bold mb-1">Allow Chrome to access the network in your firewall or antivirus settings.</p>
+                        <p class="mb-4">If it is already listed as a program allowed to access the network, try removing it from the
+                            list and adding it again.</p>
+                        <p class="fw-bold mb-1">If you use a proxy server…</p>
+                        <p class="mb-4">Check your proxy settings or contact your network administrator to make sure the proxy server
+                            is working. If you don't believe you should be using a proxy server: Go to the Chrome menu >
+                            Settings > Show advanced settings… > Change proxy settings… > LAN Settings and deselect "Use
+                            a proxy server for your LAN".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% include "scripts/js.html" %}
+
+</body>
+
+</html>

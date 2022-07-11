@@ -1,0 +1,147 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Index' %}
+</head>
+
+<body class="text-center">
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=1 login=True signup=True about=True %}
+
+    <div class="bd-example container">
+        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+                    aria-label="Slide 1" aria-current="true"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"
+                    class=""></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"
+                    class=""></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"
+                    class=""></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item carousel-item-next carousel-item-start" data-bs-interval="4000">
+                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
+                        xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder:First slide"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#0dcaf0"></rect><text x="50%" y="50%" fill="#fff"
+                            dy=".3em" class="fw-bold" style="text-anchor:middle; font-size:calc(1.475rem + 2.7vw)">All
+                            you need is 3!!!</text>
+                    </svg>
+
+                    <div class="carousel-caption d-none d-md-block">
+                        <!-- <h5>First slide label</h5> -->
+                        <p>Click next to view all 3 steps.</p>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="4000">
+                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
+                        xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder:Second slide"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#cee2fe"></rect><text x="50%" y="50%" fill="#bbb"
+                            dy=".3em" class="fw-bold"
+                            style="text-anchor:middle; font-size:calc(1.475rem + 2.7vw)">Sign Up</text>
+                    </svg>
+
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Step 1</h5>
+                        <p>Sign Up on FMS to lodge a complaint online.</p>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="4000">
+                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
+                        xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder:Third slide"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#cee2fe"></rect><text x="50%" y="50%" fill="#bbb"
+                            dy=".3em" class="fw-bold"
+                            style="text-anchor:middle; font-size:calc(1.475rem + 2.7vw)">Update Profile</text>
+                    </svg>
+
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Step 2</h5>
+                        <p>Update your profile to complete KYC.</p>
+                    </div>
+                </div>
+                <div class="carousel-item active carousel-item-start" data-bs-interval="4000">
+                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
+                        xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder:Fourth slide"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#b6d3fe"></rect><text x="50%" y="50%" fill="#999"
+                            dy=".3em" class="fw-bold"
+                            style="text-anchor:middle; font-size:calc(1.475rem + 2.7vw)">You're
+                            Done!</text>
+                    </svg>
+
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Step 3</h5>
+                        <p>Lodge a complaint.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <h5 class="card-header">Officer</h5>
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{% static 'images/officer.png'%}" class="card-img-top" alt="officer">
+                        </div>
+                        <div class="col-md-8 text-start">
+                            <div class="card-body">
+                                <h5 class="card-title">Officer Login</h5>
+                                <p class="card-text">This is a longer card with supporting text below as a natural
+                                    lead-in
+                                    to
+                                    additional content. This content is a little bit longer.</p>
+                                <a href="{% url 'login_o' %}" class="btn btn-primary">Take me there</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <h5 class="card-header">Civilian</h5>
+                    <div class="row g-0">
+                        <div class="col-md-8">
+                            <div class="card-body text-start">
+                                <h5 class="card-title">Civilian Login</h5>
+                                <p class="card-text">This is a longer card with supporting text below as a natural
+                                    lead-in
+                                    to additional content. This content is a little bit longer.</p>
+                                <a href="{% url 'login_c' %}" class="btn btn-primary">Take me there</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="{% static 'images/civilian.png'%}" class="card-img-top" alt="civilian">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "bootstrap/footer.html" %}
+
+    {% include "scripts/js.html" %}
+</body>
+
+</html>

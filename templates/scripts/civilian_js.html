@@ -1,0 +1,163 @@
+<script>
+    let filter_global = false;
+
+    function filter_method(element_id, tag) {
+        let draftcard = document.getElementsByName("draftcard");
+        let flag = false;
+        Array.from(draftcard).forEach(function (element, index) {
+            label = element.getElementsByTagName("small")[0].innerText;
+            element.style.display = 'none';
+            document.getElementsByName("draftcontrols")[index].style.display = 'none';
+            if(element_id == 1 && label == 'danger') {
+                element.style.display = 'block';
+                document.getElementsByName("draftcontrols")[index].style.display = 'block';
+                flag = true;
+            } else {
+                if (element_id == 2 && label == 'primary') {
+                    element.style.display = 'block';
+                    document.getElementsByName("draftcontrols")[index].style.display = 'block';
+                    flag = true;
+                } else {
+                    if(element_id == 3 && label == 'secondary') {
+                        element.style.display = 'block';
+                        document.getElementsByName("draftcontrols")[index].style.display = 'block';
+                        flag = true;
+                    }
+                }
+            }
+        });
+        if (!flag) {
+            document.getElementById("searchend").innerHTML = `<p class="text-muted text-center mt-3">No draft matched with tag <i>"${tag}".</i></p><p class="text-muted text-center mt-3"><span class="material-symbols-outlined" style="font-size:8em;">find_replace</span></p><p class="text-muted text-center fst-italic mt-3">Try filtering by other tags.</p>`;
+        } else {
+            document.getElementById("searchend").innerHTML = `<span class="d-block text-center text-muted mt-3 mb-0 pb-0 material-symbols-outlined">beenhere</span><p class="text-muted text-center fst-italic mt-0 pt-0">These are all drafts tagged as "${tag}".</p>`;
+        }
+        if (!filter_global) {filter_toggle();}
+    }
+
+    function filter_toggle() {
+        if (filter_global) {
+            let draftcard = document.getElementsByName("draftcard");
+            Array.from(draftcard).forEach(function (element, index) {
+                document.getElementById("searchend").style.display = 'none';
+                element.style.display = 'block';
+                document.getElementsByName("draftcontrols")[index].style.display = 'block';
+                document.getElementById("id_filter_off").style.display = 'none';
+                document.getElementById("filterMenu").style.color = "#6c757d";
+            });
+            filter_global = false;
+        } else {
+            document.getElementById("filterMenu").style.color = "#0d6efd";
+            document.getElementById("id_filter_off").style.display = 'block';
+            document.getElementById("searchend").style.display = 'block';
+            filter_global = true;
+        }
+    }
+</script>
+
+<script>
+    function set_draft_id_method(element) {
+        let draft_id = element.getElementsByTagName("small")[0].innerText;
+        document.getElementById("id_label_form").action = "/fir/update_draft_lebel/" + draft_id;
+    }
+
+    function pick_color_method(element) {
+        let element_id = element.getElementsByTagName("small")[0].innerText;
+        document.getElementById("id_submit_label").style.display = "block";
+        if (element_id == 1) {
+            document.getElementsByName("colors")[0].innerHTML = `<small style="display: none;">1</small><span class="material-symbols-outlined text-danger border border-1 border-dark border-opacity-10 rounded-4" style="font-size:2.8em;">adjust</span>`;
+            document.getElementsByName("colors")[1].innerHTML = `<small style="display: none;">2</small><span class="material-symbols-outlined text-primary" style="font-size:2.8em;">circle</span>`;
+            document.getElementsByName("colors")[2].innerHTML = `<small style="display: none;">3</small><span class="material-symbols-outlined text-secondary" style="font-size:2.8em;">circle</span>`;
+            document.getElementById("id_priority_label").value = "danger";
+        } else {
+            if (element_id == 2) {
+                document.getElementsByName("colors")[0].innerHTML = `<small style="display: none;">1</small><span class="material-symbols-outlined text-danger" style="font-size:2.8em;">circle</span>`;
+                document.getElementsByName("colors")[1].innerHTML = `<small style="display: none;">2</small><span class="material-symbols-outlined text-primary border border-1 border-dark border-opacity-10 rounded-4" style="font-size:2.8em;">adjust</span>`;
+                document.getElementsByName("colors")[2].innerHTML = `<small style="display: none;">3</small><span class="material-symbols-outlined text-secondary" style="font-size:2.8em;">circle</span>`;
+                document.getElementById("id_priority_label").value = "primary";
+            } else {
+                if (element_id == 3) {
+                    document.getElementsByName("colors")[0].innerHTML = `<small style="display: none;">1</small><span class="material-symbols-outlined text-danger" style="font-size:2.8em;">circle</span>`;
+                    document.getElementsByName("colors")[1].innerHTML = `<small style="display: none;">2</small><span class="material-symbols-outlined text-primary" style="font-size:2.8em;">circle</span>`;
+                    document.getElementsByName("colors")[2].innerHTML = `<small style="display: none;">3</small><span class="material-symbols-outlined text-secondary border border-1 border-dark border-opacity-10 rounded-4" style="font-size:2.8em;">adjust</span>`;
+                    document.getElementById("id_priority_label").value = "secondary";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    let grid_button = document.getElementById("grid_button");
+    let list_button = document.getElementById("list_button");
+    let grid_view = document.getElementById("grid_view");
+    let list_view = document.getElementById("list_view");
+
+    function grid_view_method() {
+        if (grid_button.style.color === "rgb(108, 117, 125)") {
+            list_view.style.display = 'none';
+            list_button.style.color = "#6c757d";
+            grid_view.style.display = 'flex';
+            grid_button.style.color = "#0d6efd";
+        }
+    }
+
+    function list_view_method() {
+        if (list_button.style.color === "rgb(108, 117, 125)") {
+            grid_view.style.display = 'none';
+            grid_button.style.color = "#6c757d";
+            list_view.style.display = 'block';
+            list_button.style.color = "#0d6efd";
+        }
+    }
+</script>
+
+<script>
+    let searchtext = document.getElementById("searchtext");
+    searchtext.addEventListener("input", function () {
+        if (filter_global) filter_toggle();
+        let raw_searchvalue = searchtext.value;
+        searchvalue = raw_searchvalue.toUpperCase();
+        let draftcard = document.getElementsByName("draftcard");
+        let flag = false;
+        Array.from(draftcard).forEach(function (element, index) {
+            let raw_subject = element.getElementsByTagName("h5")[0].innerText;
+            subject = raw_subject.toUpperCase();
+            if (raw_searchvalue != '') {
+                if (subject.includes(searchvalue)) {
+                    let search_index = subject.indexOf(searchvalue);
+                    let part1 = raw_subject.slice(0, search_index);
+                    let part2 = raw_subject.slice(search_index, search_index + searchvalue.length);
+                    let part3 = raw_subject.substring(search_index + searchvalue.length);
+                    let html = `<span>${part1}</span><span class="alert alert-secondary p-1 pt-0 border-secondary border-5" role="alert">${part2}</span><span>${part3}</span>`;
+                    element.getElementsByTagName("h5")[0].innerHTML = html;
+                    element.style.display = "block";
+                    flag = true;
+                    document.getElementsByName("draftcontrols")[index].style.display = "block";
+                } else {
+                    element.style.display = "none";
+                    document.getElementsByName("draftcontrols")[index].style.display = "none";
+                }
+                document.getElementById("searchend").style.display = "block";
+            } else {
+                element.getElementsByTagName("h5")[0].innerHTML = raw_subject;
+                element.style.display = "block";
+                document.getElementsByName("draftcontrols")[index].style.display = "block";
+                document.getElementById("searchend").style.display = "none";
+            }
+            if (flag) {
+                document.getElementById("searchend").innerHTML = `<span class="d-block text-center text-muted mt-3 mb-0 pb-0 material-symbols-outlined">cancel</span><p class="text-muted text-center fst-italic mt-0 pt-0">End of search results.</p>`;
+            } else {
+                document.getElementById("searchend").innerHTML = `<p class="text-muted text-center mt-3"><span class="material-symbols-outlined" style="font-size:8em;">search_off</span></p><p class="text-muted text-center fst-italic mt-3">No draft matches with your search.</p>`;
+            }
+        })
+    })
+</script>
+
+<script>
+    let elements = document.getElementsByName("timesince");
+    let timesince;
+    for (var i = 0; i < elements.length; i++) {
+        timesince = elements[i].innerText.split(",");
+        elements[i].innerText = timesince[0] + " ago";
+    }
+</script>

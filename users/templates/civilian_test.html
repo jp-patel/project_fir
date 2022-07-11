@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Civilian' %}
+
+    {% include 'google_icons/icons.html' with outline=True %}
+</head>
+
+<body class="bg-light">
+
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=2 you=True home=True about=True notification=True %}
+
+    {% include "bootstrap/modal.html" with title="You will be logged out" message="Are you sure you want to logout?" click="logout" close="Close" done="Logout" %}
+
+    {% include "bootstrap/offcanvas.html" %}
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+    </svg>
+
+    <div class="container" style="max-width:100vh;">
+        <div class="row" style="min-height:50vh;">
+            <div class="col-12 mt-5">
+                {% if object.aadhar  ==  0 %}
+                <div class="alert alert-primary" role="alert">
+                    <div>
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                            <use xlink:href="#info-fill" />
+                        </svg>
+                        <h4 class="alert-heading" style="display:inline;">Setup Your Profile</h4>
+                    </div>
+                </div>
+                <div class="alert alert-primary" role="alert">
+                    <div>
+                        <p>You need to complete your profile setup first in order to register your complaint.</p>
+                        <p><a href="{% url 'edit_c' %}" class="alert-link">Click here</a> to complete your profile
+                            setup.
+                        </p>
+                    </div>
+                </div>
+                <p class="text-center"><kbd class="bg-primary">OR</kbd></p>
+                <div class="alert alert-primary" role="alert">
+                    <div>
+                        <p>Head up to <a href="{% url 'docs' %}" class="alert-link">docs</a> to see how you can update
+                            your profile.
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if object.aadhar !=  0 %}
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-lg fw-bold fs-5 rounded-pill" type="button">
+                        <span class="align-middle material-symbols-outlined">edit</span> Make an FIR
+                    </button>
+                </div>
+                <div class="container mt-3" style="border:0.1em solid #adb5bd; border-radius:1.5em;">
+                    <ul class="nav nav-pills nav-fill my-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill" id="pills-active-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-active" type="button" role="tab" aria-controls="pills-active"
+                                aria-selected="false">Active Complaints <span class="badge bg-danger ms-1">4</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill" id="pills-history-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-history" type="button" role="tab" aria-controls="pills-history"
+                                aria-selected="false">History
+                                <span class="text-danger align-middle material-symbols-outlined">
+                                    fiber_manual_record
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade" id="pills-active" role="tabpanel" aria-labelledby="pills-active-tab"
+                            tabindex="0">
+                            ...
+                        </div>
+                        <div class="tab-pane fade" id="pills-history" role="tabpanel"
+                            aria-labelledby="pills-history-tab" tabindex="0">
+                            ...
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include "bootstrap/footer.html" %}
+
+    {% include "scripts/js.html" %}
+</body>
+
+</html>

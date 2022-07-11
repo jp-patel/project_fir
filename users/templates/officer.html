@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Officer' %}
+</head>
+
+<body class="bg-light text-center">
+
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=2 you=True home=True about=True %}
+
+    {% include "bootstrap/modal.html" with title="You will be logged out" message="Are you sure you want to logout?" click="logout" close="Close" done="Logout" %}
+    
+    <div class="container">
+        <p>{{user_role}}</p>
+        <p>{{user_id}}</p>
+    </div>
+    
+    {% include "bootstrap/footer.html" %}
+
+    {% include "scripts/js.html" %}
+</body>
+
+</html>

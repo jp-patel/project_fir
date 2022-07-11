@@ -1,0 +1,367 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Civilian' %}
+
+    {% include 'google_icons/icons.html' with opsz=20 weight=400 fill=1 grad=200 %}
+
+    <style>
+        .scale:hover {
+            transform: scale(1.28);
+            transition: transform .2s;
+        }
+    </style>
+</head>
+
+<body class="bg-light" {% if draft_object %} onload="list_view_method()" {% endif %}>
+
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=2 you=True home=True about=True notification=True %}
+
+    {% include "bootstrap/modal.html" with id="staticBackdrop" title="You will be logged out" message="Are you sure you want to logout?" click="logout" close="Close" done="Logout" %}
+
+    {% include "bootstrap/offcanvas.html" %}
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+    </svg>
+
+    <div class="container" style="max-width:100vh;">
+        <div class="row" style="min-height:50vh;">
+            <div class="col-12 mt-5">
+                {% if civilian_object.aadhar == 0 %}
+                    <div class="container mb-5" style="border-radius:1.5em;">
+                        <span class="display-3">Welcome {{usermail}}</span>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        <div>
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                <use xlink:href="#info-fill" />
+                            </svg>
+                            <h4 class="alert-heading" style="display:inline;">Setup Your Profile</h4>
+                        </div>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        <div>
+                            <p>You need to complete your profile setup first in order to register your complaint.</p>
+                            <p><a href="{% url 'edit_c' %}" class="alert-link">Click here</a> to complete your profile
+                                setup.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-center"><kbd class="bg-primary">OR</kbd></p>
+                    <div class="alert alert-primary" role="alert">
+                        <div>
+                            <p>Head up to <a href="{% url 'docs' %}" class="alert-link">docs</a> to see how you can update
+                                your profile.
+                            </p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="container mb-5" style="border-radius:1.5em;">
+                        <span class="display-3">Hello {{civilian_object.first_name}}</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'report' %}" class="btn btn-primary btn-lg fw-bold fs-5 rounded-pill" type="button">
+                            <span class="align-middle material-symbols-outlined">edit</span> Make an FIR
+                        </a>
+                    </div>
+                    <!-- <a href="{% url 'update_draft' civilian_object.pk %}">update draft</a> -->
+                    <div class="container mt-3" style="border:0.1em solid #adb5bd; border-radius:1.5em;">
+                        <ul class="nav nav-pills nav-fill my-3 flex-column flex-sm-row" id="pills-tab" role="tablist">
+                            {% with range="123" badge="badge bg-danger ms-1" icon="text-danger align-middle material-symbols-outlined" %}
+                            {% for i in range|make_list %}
+                                <li class="flex-sm-fill nav-item" role="presentation">
+                                    <button class="nav-link rounded-pill" id="pills-{% cycle 'active' 'draft' 'history' as names %}-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-{{ names }}" type="button" role="tab" aria-controls="pills-{{ names }}"
+                                        aria-selected="false">{% cycle 'Active Complaints ' 'Drafts ' 'History '%}<span
+                                            class="{% cycle badge badge icon %}">{% cycle report_object|length draft_object|length 'fiber_manual_record' %}</span>
+                                    </button>
+                                </li>
+                            {% endfor %}
+                            {% endwith %}
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade" id="pills-active" role="tabpanel" aria-labelledby="pills-active-tab"
+                                tabindex="0">
+                                <hr />
+                                <img src="{% static 'images/no_data.png' %}" class="img-fluid mx-auto d-block"
+                                    alt="No data available">
+                                <p class="fs-3 text-center">No active complaints found.</p>
+                                <p class="fs-6 text-center"><a class="btn btn-sm btn-primary" href="{% url 'report' %}" role="button">Click here</a> to make a new one.</p>
+                            </div>
+                            <div class="tab-pane fade mx-2 mb-3" id="pills-draft" role="tabpanel"
+                                aria-labelledby="pills-draft-tab" tabindex="0">
+                                {% if draft_object %}
+                                <hr />
+                                <div class="mb-3 d-flex justify-content-center">
+                                    <span class="input-group-text px-2 me-1">
+                                        <span class="material-symbols-outlined">
+                                            search
+                                        </span>
+                                    </span>
+                                    <input type="search" class="form-control" id="searchtext"
+                                        placeholder="Search by Subject..." aria-label="Search"/>
+                                </div>
+                                <div class="d-flex justify-content-end mb-2">
+                                    <a class="mx-1" href="#searchtext" title="List View" id="list_button"
+                                        onclick="list_view_method()" style="color: #6c757d;">
+                                        <span class="material-symbols-outlined">
+                                            view_agenda
+                                        </span>
+                                    </a>
+                                    <a class="mx-1" href="#searchtext" title="Grid View" id="grid_button"
+                                        onclick="grid_view_method()" style="color: #0d6efd;">
+                                        <span class="material-symbols-outlined">
+                                            grid_view
+                                        </span>
+                                    </a>
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm mx-0 p-0" href="#searchtext" type="button" id="filterMenu" data-bs-toggle="dropdown" aria-expanded="false" title="Filter" style="color: #6c757d;">
+                                            <span class="material-symbols-outlined">
+                                                filter_alt
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu border border-2 border-opacity-50 border-secondary rounded-4 shadow" aria-labelledby="filterMenu">
+                                            <li><h6 class="dropdown-header fs-6 pt-0 ps-0 ms-2">Filter By...</h6></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><h6 class="dropdown-header fs-6 bg-light">Tag</h6></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><a class="dropdown-item" href="#searchtext" onclick="filter_method(1,'Very Important')">Very Important</a></li>
+                                            <li><a class="dropdown-item" href="#searchtext" onclick="filter_method(2, 'Important')">Important</a></li>
+                                            <li><a class="dropdown-item" href="#searchtext" onclick="filter_method(3, 'Not Important')">Not Important</a></li>
+                                            <div id="id_filter_off" style="display: none;">
+                                                <li><hr class="dropdown-divider m-0"></li>
+                                                <li>
+                                                    <a class="container dropdown-item px-2 mt-2" href="#searchtext" onclick="filter_toggle()">
+                                                        <div class="fs-6 text-white bg-secondary fw-bold rounded-pill p-1 text-center">Clear Filter
+                                                            <span class="align-middle material-symbols-outlined">filter_alt_off</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm mx-0 p-0" href="#searchtext" type="button" id="sortMenu" data-bs-toggle="dropdown" aria-expanded="false" title="Sort By..." style="color: #6c757d;">
+                                            <span class="material-symbols-outlined">
+                                                sort
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu border border-2 border-opacity-50 border-secondary rounded-4 shadow" aria-labelledby="sortMenu">
+                                            <li><h6 class="dropdown-header fs-6 pt-0 ps-0 ms-2">Sort By...</h6></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><h6 class="dropdown-header fs-6 bg-light">Tag</h6></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><a class="dropdown-item" href="#searchtext">High to low importance</a></li>
+                                            <li><a class="dropdown-item" href="#searchtext">Low to high importance</a></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><h6 class="dropdown-header fs-6 bg-light">Date</h6></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><a class="dropdown-item" href="#searchtext">Ascending</a></li>
+                                            <li><a class="dropdown-item" href="#searchtext">Descending</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="colorPalette" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                aria-labelledby="colorPaletteLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-light py-2">
+                                                <h5 class="modal-title" id="colorPaletteLabel">Choose a Tag...</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body row text-center pb-0">
+                                                {% with range="123" %}
+                                                {% for i in range|make_list %}
+                                                <a class="col-4 p-0 scale" onclick="pick_color_method(this)" name="colors">
+                                                    <small style="display: none;">{{i}}</small>
+                                                    <span class="material-symbols-outlined text-{% cycle 'danger' 'primary' 'secondary' %}" style="font-size:2.8em;">circle</span>
+                                                </a>
+                                                {% endfor %}
+                                                {% endwith %}
+                                                <div class="col-12 ms-2 mt-2">
+                                                    <small class="row m-0 p-0">
+                                                        {% with range="123" %}
+                                                        {% for i in range|make_list %}
+                                                        <p class="col-4 m-0 p-0"><span class="material-symbols-outlined text-{% cycle 'danger' 'primary' 'secondary' %} align-middle"
+                                                        title="tag">
+                                                            label
+                                                        </span> {% cycle 'Very Important' 'Important' 'Not Important' %}</p>
+                                                        {% endfor %}
+                                                        {% endwith %}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer bg-light py-2">
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                <form method="post" id="id_label_form">
+                                                    {% csrf_token %}
+                                                    <input type="text" name="label" maxlength="10" id="id_priority_label" hidden/>
+                                                    <input type="submit" class="btn btn-primary btn-sm" id="id_submit_label" value="Done" style="display: none;">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="list-group px-0" id="view">
+                                    <div class="row g-1" id="grid_view">
+                                        {% for k in draft_object %}
+                                        {% for j in draft_object %}
+                                        {% for i in draft_object %}
+                                        <div class="col-6" name="draftcard">
+                                            <small style="display: none;">{{i.label}}</small>
+                                            <div class="position-relative">
+                                                <div class="position-absolute bottom-0 end-0 pb-2 pe-3" name="draftcontrols"
+                                                    style="z-index: 2;">
+                                                    <a class="btn p-0" href="{% url 'delete_draft' i.pk %}">
+                                                        <span class="float-end material-symbols-outlined text-danger"
+                                                            title="delete">
+                                                            delete
+                                                        </span>
+                                                    </a>
+                                                    <a class="btn p-0" data-bs-toggle="modal"
+                                                    data-bs-target="#colorPalette" onclick="set_draft_id_method(this)">
+                                                        <small style="display: none;">{{i.pk}}</small>
+                                                        <span class="float-end material-symbols-outlined text-{{i.label}}"
+                                                            title="tag">
+                                                            label
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <a href="{% url 'update_draft' i.pk %}"
+                                                    class="list-group-item list-group-item-action rounded-4"
+                                                    style="box-shadow:2px 2px 4px 0px #adb5bd; z-index: 1;">
+                                                    <h5 class="subject mb-1 text-break">{{i.subject}}</h5>
+                                                    <hr class="mb-1" />
+                                                    <p class="mb-1">{{ i.concern|truncatechars:75 }}</p>
+                                                    <div class="pb-1 mb-4 mt-auto">
+                                                        <small class="text-muted fst-italic d-block" name="timesince"
+                                                            title="{{i.date}}">Created: {{ i.date|timesince }}, ago</small>
+                                                        <hr class="m-0 pb-1" />
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                    <div id="list_view">
+                                        {% for i in draft_object %}
+                                        <div class="position-relative" name="draftcontrols">
+                                            <div class="position-absolute top-0 end-0 p-3" style="z-index: 2;">
+                                                <a class="p-0 btn" href="{% url 'delete_draft' i.pk %}">
+                                                    <span class="material-symbols-outlined text-danger" title="delete">
+                                                        delete
+                                                    </span>
+                                                </a>
+                                                <a class="p-0 btn" data-bs-toggle="modal"
+                                                data-bs-target="#colorPalette" onclick="set_draft_id_method(this)">
+                                                    <small style="display: none;">{{i.pk}}</small>
+                                                    <span class="material-symbols-outlined text-{{i.label}}" title="tag">
+                                                        label
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'update_draft' i.pk %}"
+                                            class="list-group-item list-group-item-action my-1 rounded-4 pb-4"
+                                            style="box-shadow:2px 2px 4px 0px #adb5bd;" name="draftcard">
+                                            <div class="d-flex w-100 justify-content-between" style="z-index: 1;">
+                                                <h5 class="subject mb-1 text-break">{{i.subject}}</h5>
+                                            </div>
+                                            <p class="mb-1">{{ i.concern|truncatechars:150 }}</p>
+                                            <small style="display: none;">{{i.label}}</small>
+                                            <small class="text-secondary d-block">{{i.division}}</small>
+                                            <small class="float-end text-muted fst-italic" name="timesince"
+                                                title="{{i.date}}">Created: {{ i.date|timesince }}, ago</small>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                    <div id="searchend"></div>
+                                </div>
+                                {% else %}
+                                <img src="{% static 'images/no_data.png' %}" class="img-fluid mx-auto d-block"
+                                    alt="No data available">
+                                <p class="fs-2 text-center">No drafts found.</p>
+                                <p class="fs-6 text-center"><a class="btn btn-sm btn-primary" href="{% url 'report' %}" role="button">Click here</a> to make a new draft.</p>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane fade" id="pills-history" role="tabpanel"
+                                aria-labelledby="pills-history-tab" tabindex="0">
+                                <hr />
+                                {% if history_object %}
+                                    {% for i in history_object %}
+                                        {% if i.type %}
+                                            {% if i.issue == 0 %}
+                                                <div class="alert alert-dark rounded-4 border border-2 border-dark border-opacity-50 shadow-sm" role="alert">
+                                                    {{i.title}} on {{i.datetime}}
+                                                    <hr />
+                                                    <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if i.issue == 0 %}
+                                                <div class="alert alert-primary rounded-4 border border-2 border-primary border-opacity-50 shadow-sm" role="alert">
+                                                    {{i.title}} on {{i.datetime}}
+                                                    <hr />
+                                                    <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+                                                </div>
+                                            {% endif %}
+                                            {% if i.issue == 1 %}
+                                                <div class="alert alert-success rounded-4 border border-2 border-success border-opacity-50 shadow-sm" role="alert">
+                                                    {{i.title}} on {{i.datetime}}
+                                                    <hr />
+                                                    <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+                                                </div>
+                                            {% endif %}
+                                            {% if i.issue == 2 %}
+                                                <div class="alert alert-danger rounded-4 border border-2 border-danger border-opacity-50 shadow-sm" role="alert">
+                                                    {{i.title}} on {{i.datetime}}
+                                                    <hr />
+                                                    <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <div class="row text-center my-2 pb-2">
+                                        <hr />
+                                        <div class="col-3 fw-bold text-secondary">Legends:</div>
+                                        <div class="col-3"><span class="material-symbols-outlined text-primary align-middle">circle</span> Creation</div>
+                                        <div class="col-3"><span class="material-symbols-outlined text-success align-middle">circle</span> Update</div>
+                                        <div class="col-3"><span class="material-symbols-outlined text-danger align-middle">circle</span> Deletion</div>
+                                    </div>
+                                {% else %}
+                                    <img src="{% static 'images/no_data.png' %}" class="img-fluid mx-auto d-block"
+                                        alt="No data available">
+                                        <hr />
+                                    <p class="fs-2 text-center">You do not have any past FIRs.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if draft_object %}
+    {% include "scripts/civilian_js.html" %}
+    {% endif %}
+
+    {% include "bootstrap/footer.html" %}
+
+    {% include "scripts/js.html" %}
+</body>
+
+</html>

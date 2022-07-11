@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Change Password' %}
+</head>
+
+<body class="bg-primary">
+
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=1 home=True about=True %}
+
+    <!-- form -->
+    <div class="container" style="max-width:100vh;">
+        <div class="row align-items-center" style="min-height:90vh;">
+            <div class="col-12">
+                <form class="row g-3 needs-validation p-4 mt-5 mb-5" style="background-color:#fff; border-radius:2em;"
+                    method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="col-12">
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" minlength="8" maxlength="15"
+                            required="" id="id_password" autofocus>
+                        <div class="invalid-feedback">
+                            Please provide a valid password.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="id_new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" name="newpassword" minlength="8" maxlength="15"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8, }" required="" id="id_new_password">
+                        <div class="invalid-feedback">
+                            Please provide a valid password.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="id_re_password" class="form-label">Re-enter New Password</label>
+                        <input type="password" class="form-control" name="repassword" minlength="8" maxlength="15"
+                            required="" id="id_re_password">
+                        <div class="invalid-feedback">
+                            Please provide a valid password.
+                        </div>
+                    </div>
+                    <div class="container mt-3">
+                        <div class="row text-center">
+                            <div class="d-grid col-md-4">
+                                <button class="btn btn-primary mb-1 rounded-pill" type="submit" onclick="check()">Change
+                                    Password</button>
+                            </div>
+                            <div class="d-grid col-md-4">
+                                <button class="btn btn-primary mb-1 rounded-pill" type="reset">Reset</button>
+                            </div>
+                            <div class="d-grid col-md-4">
+                                <a href="{% url 'civilian' %}" class="btn btn-primary mb-1 rounded-pill">Discard</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- <p class="mt-5 mb-3 text-muted">Site under development.</p>
+                    <p class="text-muted fixed-bottom pb-3">&copy; 2021–2022</p>
+                    <p class="text-muted mb-2" style="position:fixed; bottom:0px; right:10px;">Made with &#10084;
+                        on &#127759;.</p> -->
+            </div>
+        </div>
+    </div>
+
+    {% include "scripts/validate.html" %}
+
+    {% include "scripts/js.html" %}
+</body>
+
+</html>

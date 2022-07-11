@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Login' %}
+</head>
+
+<body class="bg-light text-center">
+
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=2 login=True signup_o=True home=True about=True %}
+
+    <!-- form -->
+    <div class="container" style="max-width:50vh;">
+        <div class="row align-items-center" style="min-height:90vh;">
+            <div class="col-md-12">
+                <form method="post">
+                    {% csrf_token %}
+                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+                    <div class="form-floating mb-2">
+                        <input type="email" class="form-control" name="email" maxlength="254" required="" id="id_email"
+                            placeholder="name@example.com" autofocus>
+                        <label for="id_email">Email address</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" name="password" maxlength="15" required=""
+                            id="id_password" placeholder="Password">
+                        <label for="id_password">Password</label>
+                    </div>
+
+                    <div class="checkbox my-2">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Remember me
+                        </label>
+                    </div>
+                    <span><a href="#" style="float:right;">Forgot Password</a></span>
+                    <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">Sign in</button>
+                    <p class="mt-5 mb-3 text-muted">Site under development.</p>
+                    <p class="text-muted fixed-bottom pb-3">&copy; 2021–2022</p>
+                    <p class="text-muted mb-2" style="position:fixed; bottom:0px; right:10px;">Made with &#10084;
+                        on &#127759;.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include "scripts/js.html" %}
+
+</body>
+
+</html>

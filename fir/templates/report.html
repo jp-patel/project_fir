@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap/head.html' with title='Report' %}
+
+    {% include "google_icons/icons.html" with opsz=40 weight=400 fill=1 grad=200 %}
+</head>
+
+<body class="bg-primary">
+
+    <!-- navbar -->
+    {% include "bootstrap/navbar.html" with navtype=1 home=True about=True %}
+
+    <!-- form -->
+    <div class="container" style="max-width:100vh;">
+        <div class="row align-items-center" style="min-height:90vh;">
+            <div class="col-12">
+                <form class="needs-validation" method="post" novalidate>
+                    {% csrf_token %}
+                    <!-- {{form.civilian}}
+                    {{form.officer}} -->
+                    <div class="display-4 text-white mt-5">Incident Details</div>
+                    <div class="row g-3 p-4 mt-3 mb-5" style="background-color:#fff; border-radius:2em;">
+                        <div class="col-12">
+                            <label for="id_subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" name="subject" maxlength="30" required=""
+                                id="id_subject" value="{{report_object.subject}}" autofocus>
+                            <div class="invalid-feedback">
+                                Please provide a valid subject.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="id_concern" class="form-label">Concern</label>
+                            <textarea class="form-control" name="concern" rows="7" required=""
+                                id="id_concern">{{report_object.concern}}</textarea>
+                            <div class="invalid-feedback">
+                                Please provide a valid concern.
+                            </div>
+                        </div>
+                        <legend>Location</legend>
+                        <div class="col-12">
+                            <label for="id_address" class="form-label">Address</label>
+                            <input type="text" class="form-control" name="address" maxlength="30" required=""
+                                id="id_address" value="{{report_object.address}}">
+                            <div class="invalid-feedback">
+                                Please provide a valid address.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_intersection" class="form-label">Intersection</label>
+                            <input type="text" class="form-control" name="intersection" maxlength="30" required=""
+                                id="id_intersection" value="{{report_object.intersection}}">
+                            <div class="invalid-feedback">
+                                Please provide a valid intersection.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_division" class="form-label">Nearby Police Division</label>
+                            <select class="form-select" name="division" required="" id="id_division">
+                                {% for i in division %}
+                                {% if report_object.division  ==  i %}
+                                <option value="{{ i.pk }}" selected>{{ i }}</option>
+                                {% else %}
+                                <option value="{{ i.pk }}">{{ i }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid police division.
+                            </div>
+                        </div>
+                        {{report_object.day}}
+                        <legend>When does the problem occur?</legend>
+                        <div class="col-md-6">
+                            <label for="id_day" class="form-label">Day</label>
+                            <input type="date" class="form-control" name="day" required="" id="id_day"
+                                value="{{report_object.day}}">
+                            <div class="invalid-feedback">
+                                Please provide a valid day.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_time" class="form-label">Time</label>
+                            <input type="time" class="form-control" name="time" required="" id="id_time"
+                                value="{{report_object.time}}">
+                            <div class="invalid-feedback">
+                                Please provide a valid time.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_frequency" class="form-label">I have observed this problem or concern</label>
+                            <select class="form-select" name="frequency" maxlength="20" required="" id="id_frequency"
+                                value="{{report_object.frequency}}">
+                                <option value="1">Once</option>
+                                <option value="2">More than once</option>
+                                <option value="3">Several times</option>
+                                <option value="4">Many times</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid frequency.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="display-4 text-white">Complainee Details</div>
+                    <div class="row g-3 p-4 mt-3 mb-5" style="background-color:#fff; border-radius:2em;">
+                        <div>
+                            <a href="{% url 'edit_c' %}?fir=True">
+                                <span class="float-end text-primary material-symbols-outlined">
+                                    edit
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_complainee" class="form-label">Complainee</label>
+                            <input type="text" class="form-control" name="complainee" maxlength="50" required=""
+                                id="id_complainee" value="{{civilian_object.first_name}} {{civilian_object.last_name}}" readonly>
+                            <div class="invalid-feedback">
+                                Please provide a valid complainee.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="id_complainee_address" class="form-label">Address</label>
+                            <textarea class="form-control" name="complainee_address" rows="4" required=""
+                                id="id_complainee_address" style="resize:none;" readonly>{{civilian_object.address}}</textarea>
+                            <div class="invalid-feedback">
+                                Please provide a valid complainee address.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_city" class="form-label">Jurisdiction</label>
+                            <input type="text" class="form-control" name="city" min="0" maxlength="20" required=""
+                                id="id_city" value="{{civilian_object.city}}" readonly>
+                            <div class="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_pincode" class="form-label">Pincode</label>
+                            <input type="text" class="form-control" name="pincode" min="0" required="" id="id_pincode"
+                                pattern="[0-9]{6}" value="{{civilian_object.pincode}}" readonly>
+                            <div class="invalid-feedback">
+                                Please provide a valid pincode.
+                            </div>
+                        </div>
+                        <label for="id_phone" class="form-label mb-0">Mobile</label>
+                        <div class="input-group col-12">
+                            <span class="input-group-text">+91</span>
+                            <input type="tel" class="form-control rounded-end" name="phone" min="0" required=""
+                                id="id_phone" pattern="[6-9]{1}[0-9]{9}" value="{{civilian_object.phone}}" readonly>
+                            <div class="invalid-feedback">
+                                Please provide a valid mobile number.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_virtual_email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required=""
+                                id="id_email" value="{{civilian_object.email}}" readonly>
+                            <div class="invalid-feedback">
+                                Please provide a email.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="id_date" class="form-label">FIR Registration Date</label>
+                            <input type="date" class="form-control" name="date" required="" id="id_date"
+                                value="{{date}}" readonly>
+                            <div class="invalid-feedback">
+                                Please provide a valid date.
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" name="civilian" required=""
+                            id="id_civilian" value="{{civilian_object.pk}}" hidden>
+                        <!-- <input type="text" class="form-control" name="officer" required=""
+                            id="id_officer" value="" hidden> -->
+                        <!-- <input type="number" class="form-control" name="id" required=""
+                                id="id_id" value="{{id}}" hidden> -->
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                                <label class="form-check-label" for="invalidCheck">
+                                    Agree to <a href="{% url 'tac' %}">terms and conditions</a>
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree before submitting.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container mb-5">
+                        <div class="row text-center">
+                            <div class="d-grid col-md-4">
+                                <button class="btn bg-white text-primary mb-1 rounded-pill fw-bold" type="submit"
+                                    onclick="check()">Register FIR</button>
+                            </div>
+                            <div class="d-grid col-md-4">
+                                <button class="btn bg-white text-primary mb-1 rounded-pill fw-bold"
+                                    type="reset">Reset</button>
+                            </div>
+                            <div class="d-grid col-md-4">
+                                {% if create %}
+                                <button class="btn bg-white text-primary mb-1 rounded-pill fw-bold" type="submit"
+                                    formaction="{% url 'create_draft' %}">Save as Draft</button>
+                                    <!-- onclick="this.disabled=true; this.form.action='../create_draft/'; this.form.submit();" -->
+                                {% endif %}
+                                {% if update %}
+                                    <button class="btn bg-white text-primary mb-1 rounded-pill fw-bold" type="submit">Update Draft</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include "scripts/validate.html" %}
+
+    {% include "scripts/js.html" %}
+</body>
+
+</html>

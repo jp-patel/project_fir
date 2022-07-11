@@ -1,0 +1,130 @@
+{% if navtype == 1 %}
+<header class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+    {% endif %}
+    {% if navtype == 2 %}
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow-sm">
+        {% endif %}
+        <nav class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">FMS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" style="right:0%;" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    {% if login %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Login as
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'login_c' %}">Civilian</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'login_o' %}">Officer</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    {% if signup %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Signup as
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'signup_c' %}">Civilian</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'signup_o' %}">Officer</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    {% if you %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            You
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'edit_c' %}">Edit profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'change_pwd' %}">Change Password</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop">Logout</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    {% if login_c or login_o %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="{% if login_c %}{% url 'login_c' %}{% endif %}{% if login_o %}{% url 'login_o' %}{% endif %}">Login</a>
+                    </li>
+                    {% endif %}
+                    {% if signup_c or signup_o %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="{% if signup_c %}{% url 'signup_c' %}{% endif %}{% if signup_o %}{% url 'signup_o' %}{% endif %}">Register</a>
+                    </li>
+                    {% endif %}
+                    {% if home %}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
+                    </li>
+                    {% endif %}
+                    {% if about %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                    </li>
+                    {% endif %}
+                    {% if notification %}
+                    <li class="nav-item">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                            <span class="text-light align-middle material-symbols-outlined position-relative"
+                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                aria-controls="offcanvasRight">
+                                notifications
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            </span>
+                        </button>
+                    </li>
+                    {% endif %}
+                </ul>
+                <!-- <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form> -->
+            </div>
+        </nav>
+    </header>
+
+    <div class="position-fixed bottom-0 end-0 mb-4 me-4" id="is_screen_mode" style="z-index: 4;">
+        <button class="btn btn-secondary btn-lg pb-0 px-1" onclick="toggleFullScreen()"><span
+                class="text-light material-symbols-outlined">open_in_full</span></button>
+    </div>
+
+    <script>
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById("is_screen_mode").innerHTML = `<button class="btn btn-secondary btn-lg pb-0 px-1" onclick="toggleFullScreen()"><span class="text-light material-symbols-outlined">close_fullscreen</span></button>`;
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.getElementById("is_screen_mode").innerHTML = `<button class="btn btn-secondary btn-lg pb-0 px-1" onclick="toggleFullScreen()"><span class="text-light material-symbols-outlined">open_in_full</span></button>`;
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
